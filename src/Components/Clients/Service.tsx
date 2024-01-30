@@ -1,8 +1,8 @@
 
-export async function getClientsList() {
+export async function getClientsList(skip: number, take: number, search: string = "") {
     try {
         // Replace the URL with the actual endpoint you want to fetch data from
-        const response = await fetch('http://localhost:5109/api/clients/clients-list');
+        const response = await fetch(`http://localhost:5109/api/clients/clients-list?skip=${skip}&take=${take}&search=${search}`);
 
         // Check if the request was successful (status code 200-299)
         if (!response.ok) {
