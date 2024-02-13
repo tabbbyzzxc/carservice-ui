@@ -1,9 +1,12 @@
-import React, {FormEvent, useState} from "react";
-import {Client, NewClient} from "./Model";
-import {postClient} from "./Service";
-import {useNavigation} from "react-router-dom";
+import React, {FormEvent, useEffect, useState} from "react";
+import {Client, EditClient} from "./Model";
+import {editClient, getClient, postClient} from "./Service";
+import {useParams} from "react-router-dom";
+import {AppOptions} from "../../AppOptions";
 
-const ClientForm: React.FC = () => {
+const ClientEditForm: React.FC = () => {
+    const { clientId } = useParams();
+
     const [email, setEmail] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('+38');
     const [firstName, setFirstName] = useState('');
@@ -11,10 +14,33 @@ const ClientForm: React.FC = () => {
     const [address, setAddress] = useState('');
     const [city, setCity] = useState('');
 
+    useEffect(() => {
+        loadClient(clientId!);
+    }, []); // The empty dependency array ensures that this effect runs once on mount
+
+
+    const loadClient = (id: string) => {
+        const fetchDataFromApi = async () => {
+            try {
+                const result = await getClient(parseInt(clientId!));
+                setEmail(result.email);
+                setPhoneNumber(result.phoneNumber);
+                setFirstName(result.firstName);
+                setLastName(result.lastName);
+                setAddress(result.address);
+                setCity(result.city);
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        };
+
+        fetchDataFromApi();
+    }
+
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault()
         const client = {email, phoneNumber, firstName, lastName, address, city};
-        await postClient(client as NewClient);
+        await editClient(parseInt(clientId!), client as EditClient);
     }
 
     return(
@@ -92,4 +118,4 @@ const ClientForm: React.FC = () => {
 
 
 
-export default ClientForm;
+export default ClientEditForm;

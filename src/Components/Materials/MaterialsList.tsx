@@ -1,15 +1,13 @@
-import {getClientsList} from "./Service";
 import React, {useEffect, useState} from "react";
-import {Client} from "./Model";
-import {AppOptions} from "../../AppOptions";
+import {Material} from "./Model";
 import Search from "../Common/Search";
 import {Link} from "react-router-dom";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import { faPenSquare } from '@fortawesome/free-solid-svg-icons';
+import {AppOptions} from "../../AppOptions";
+import {getClientsList} from "../Clients/Service";
+import {getMaterialsList} from "./Service";
 
-
-const ClientsList: React.FC = () => {
-    const [listClients, setListClients] = useState<Client[]>([]);
+const MaterialsList: React.FC = () =>{
+    const [materialsList, setMaterialsList] = useState<Material[]>([]);
     const [totalCount, setTotalCount] = useState(0);
     const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -22,8 +20,8 @@ const ClientsList: React.FC = () => {
         setCurrentIndex(index);
         const fetchDataFromApi = async () => {
             try {
-                const result = await getClientsList(index * AppOptions.tableRowsCount, AppOptions.tableRowsCount, search);
-                setListClients(result.clients);
+                const result = await getMaterialsList(index * AppOptions.tableRowsCount, AppOptions.tableRowsCount, search);
+                setMaterialsList(result.clients);
                 setTotalCount(result.total);
             } catch (error) {
                 console.error('Error:', error);
@@ -36,30 +34,21 @@ const ClientsList: React.FC = () => {
     return (
         <div className="container">
             <Search onSearchChange={loadPage} />
-            <Link className="nav-link" to="/clients/new">
-                <button type="button" className="btn btn-primary">New Client</button>
-            </Link>
+            <Link className="nav-link" to="/clients/new">New Client</Link>
             <table className="table table-striped">
                 <thead>
-                    <tr>
-                        <th>Id</th>
-                        <th>Name</th>
-                    </tr>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                </tr>
                 </thead>
                 <tbody>
-                    {listClients.map((item, index) => (
-                        <tr key={index}>
-                            <td>{item.id}</td>
-                            <td>{item.firstName + " " + item.lastName}</td>
-                            <td>
-                                <Link to={`/clients/edit/${item.id}`}>
-                                    <button type={"button"}>
-                                        <FontAwesomeIcon icon={faPenSquare} />
-                                    </button>
-                                </Link>
-                                </td>
-                        </tr>
-                    ))}
+                {materialsList.map((item, index) => (
+                    <tr key={index}>
+                        <td>{item.id}</td>
+                        <td>{item.name}</td>
+                    </tr>
+                ))}
                 </tbody>
             </table>
             <nav aria-label="Page navigation example">
@@ -76,5 +65,3 @@ const ClientsList: React.FC = () => {
         </div>
     );
 }
-
-export default ClientsList

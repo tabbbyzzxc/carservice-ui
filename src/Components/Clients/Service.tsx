@@ -1,41 +1,22 @@
+import {Client, EditClient, NewClient} from "./Model";
+import {Get, Post, Put} from "../../Services/Http/ApiServiceProvider";
+
 
 export async function getClientsList(skip: number, take: number, search: string = "") {
-    try {
-        // Replace the URL with the actual endpoint you want to fetch data from
-        const response = await fetch(`http://localhost:5109/api/clients/clients-list?skip=${skip}&take=${take}&search=${search}`);
-
-        // Check if the request was successful (status code 200-299)
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        // Parse the JSON response
-        return await response.json();
-    } catch (error) {
-        // Handle any errors that occurred during the fetch
-        console.error('Fetch Error:', error);
-    }
+    const response = await Get(`clients/clients-list?skip=${skip}&take=${take}&search=${search}`);
+    return response.data;
 }
-/*
-export function getClientsList(): Client[] {
-    try {
-        fetch('http://localhost:5109/api/clients/clients-list')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
 
-                return response.json();
-            })
-            .then(data => {
-                return data as Client[];
-            })
+export async function getClient(id: number){
+    const response = await Get(`clients/get-client?id=${id}`);
+    return response.data;
+}
 
-        // Check if the request was successful (status code 200-299)
-    } catch (error) {
-        // Handle any errors that occurred during the fetch
-        console.error('Fetch Error:', error);
-    }
+export async function postClient(client: NewClient){
+        const response = await Post('clients/post-client', client);
+}
 
-    return [];
-}*/
+export async function editClient(id: number, client: EditClient){
+    const response = await Put(`clients/edit-client/${id}`, client);
+}
+
