@@ -1,8 +1,9 @@
 import React, {FormEvent, useEffect, useState} from "react";
-import {Client, EditClient} from "./Model";
+import {Client, EditCar, EditClient} from "./Model";
 import {editClient, getClient, postClient} from "./Service";
 import {useParams} from "react-router-dom";
 import {AppOptions} from "../../AppOptions";
+import {editCar} from "../Cars/Service";
 
 const ClientEditForm: React.FC = () => {
     const { clientId } = useParams();

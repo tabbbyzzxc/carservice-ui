@@ -1,4 +1,4 @@
-import {Client, EditClient, NewClient} from "./Model";
+import {Car, Client, EditClient, NewCar, NewClient} from "./Model";
 import {Get, Post, Put} from "../../Services/Http/ApiServiceProvider";
 
 

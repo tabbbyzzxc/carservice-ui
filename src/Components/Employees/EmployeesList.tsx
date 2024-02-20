@@ -1,17 +1,17 @@
-import {getClientsList} from "./Service";
 import React, {useEffect, useState} from "react";
-import {Client} from "./Model";
 import {AppOptions} from "../../AppOptions";
 import Search from "../Common/Search";
 import {Link} from "react-router-dom";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import { faPenSquare } from '@fortawesome/free-solid-svg-icons';
-import NewClientModal from "./NewClientModal";
-import EditClientModal from "./EditClientModal";
+import {getEmployeesList} from "./Service";
+import {Employee} from "./Model";
+import EditEmployeeModal from "./EditEmployeeModal";
 
 
-const ClientsList: React.FC = () => {
-    const [listClients, setListClients] = useState<Client[]>([]);
+
+const EmployeesList: React.FC = () => {
+    const [employeesList, setEmployeesList] = useState<Employee[]>([]);
     const [totalCount, setTotalCount] = useState(0);
     const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -24,8 +24,8 @@ const ClientsList: React.FC = () => {
         setCurrentIndex(index);
         const fetchDataFromApi = async () => {
             try {
-                const result = await getClientsList(index * AppOptions.tableRowsCount, AppOptions.tableRowsCount, search);
-                setListClients(result.clients);
+                const result = await getEmployeesList(index * AppOptions.tableRowsCount, AppOptions.tableRowsCount, search);
+                setEmployeesList(result.employees);
                 setTotalCount(result.total);
             } catch (error) {
                 console.error('Error:', error);
@@ -41,7 +41,7 @@ const ClientsList: React.FC = () => {
             {/*<Link className="nav-link" to="/clients/new">
                 <button type="button" className="btn btn-primary">New Client</button>
             </Link>*/}
-            <NewClientModal/>
+            {/*<NewEmployeeModal/>*/}
             <table className="table table-striped">
                 <thead>
                     <tr>
@@ -50,7 +50,7 @@ const ClientsList: React.FC = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {listClients.map((item, index) => (
+                    {employeesList.map((item, index) => (
                         <tr key={index}>
                             <td>{item.id}</td>
                             <td>{item.firstName + " " + item.lastName}</td>
@@ -60,7 +60,7 @@ const ClientsList: React.FC = () => {
                                         <FontAwesomeIcon icon={faPenSquare} />
                                     </button>
                                 </Link>*/}
-                                <EditClientModal clientId={item.id}/>
+                                <EditEmployeeModal employeeId={item.id}/>
                             </td>
                         </tr>
                     ))}
@@ -81,4 +81,4 @@ const ClientsList: React.FC = () => {
     );
 }
 
-export default ClientsList
+export default EmployeesList;
