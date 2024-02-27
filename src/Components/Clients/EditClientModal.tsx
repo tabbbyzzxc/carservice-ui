@@ -1,18 +1,18 @@
 import React, {FormEvent, useEffect, useState} from "react";
 import {Car, Client, EditCar, EditClient, NewCar} from "./Model";
 import {editClient, getClient, postClient} from "./Service";
-import {editCar, postCar} from "../Cars/Service"
+import {deleteCar, editCar, postCar} from "../Cars/Service"
 import {useParams} from "react-router-dom";
 import {AppOptions} from "../../AppOptions";
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCar, faPenSquare, faPlus} from "@fortawesome/free-solid-svg-icons";
+import {faUserPen} from "@fortawesome/free-solid-svg-icons";
 import Card from 'react-bootstrap/Card';
 import NewCarModal from "../Cars/NewCarModal";
 import CarCard from "../Cars/CarCard";
 
-const ClientEditForm: React.FC<{ clientId: number }> = ({ clientId }) => {
+const EditClientModal: React.FC<{ clientId: number }> = ({ clientId }) => {
     //const { clientId } = useParams();
 
     const [email, setEmail] = useState('');
@@ -76,10 +76,15 @@ const ClientEditForm: React.FC<{ clientId: number }> = ({ clientId }) => {
         setCars(resp.data);
     }
 
+    const handleCarDelete = async(id:number) =>{
+        const resp = await deleteCar(id);
+        setCars(resp.data);
+    }
+
     return(
         <>
         <Button variant="link" onClick={handleShow}>
-            <FontAwesomeIcon icon={faPenSquare} />
+            <FontAwesomeIcon icon={faUserPen} />
         </Button>
 
         <Modal
@@ -104,6 +109,7 @@ const ClientEditForm: React.FC<{ clientId: number }> = ({ clientId }) => {
                                     <CarCard
                                         car={item}
                                         onEditCar={handleCarEdit}
+                                        onDeleteCar={handleCarDelete}
                                     />
                                 </li>
                             ))}
@@ -186,4 +192,4 @@ const ClientEditForm: React.FC<{ clientId: number }> = ({ clientId }) => {
 }
 
 
-export default ClientEditForm;
+export default EditClientModal;

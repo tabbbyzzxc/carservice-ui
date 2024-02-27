@@ -23,8 +23,3 @@ export interface EditEmployee{
     phoneNumber: string;
 }
 
-export interface Specialization{
-    name: string;
-    hours: number;
-    price: number;
-}

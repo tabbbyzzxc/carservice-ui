@@ -1,5 +1,5 @@
 import React, {FormEvent, useEffect, useState} from "react";
-import {EditEmployee, Specialization} from "./Model";
+import {EditEmployee} from "./Model";
 import {useParams} from "react-router-dom";
 import {AppOptions} from "../../AppOptions";
 import Button from 'react-bootstrap/Button';
@@ -10,6 +10,7 @@ import Card from 'react-bootstrap/Card';
 import NewCarModal from "../Cars/NewCarModal";
 import CarCard from "../Cars/CarCard";
 import {editEmployee, getEmployee} from "./Service";
+import {Specialization} from "../Specializations/Model";
 
 const EmployeeEditModal: React.FC<{ employeeId: number }> = ({ employeeId }) => {
     //const { clientId } = useParams();

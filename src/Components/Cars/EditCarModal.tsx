@@ -73,7 +73,7 @@ const EditCarModal: React.FC<{ car: Car, onAddCar: (car: EditCar) => Promise<voi
                     <Button variant="secondary" onClick={() => onClose(false)}>
                         Close
                     </Button>
-                    <Button type="button" variant="primary" onClick={() => onAddCar({make, model, year, vin})}>Update</Button>
+                    <Button variant="primary" onClick={() => onAddCar({make, model, year, vin})}>Update</Button>
                 </Modal.Footer>
             </Modal>
         </>

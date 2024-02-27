@@ -27,3 +27,7 @@ export const Post = async (url: string, data: any) => {
 export const Put = async (url: string, data: any) => {
     return axios.put(`${AppOptions.baseURL}/${url}`, data, {headers});
 }
+
+export const Delete = async(url: string) => {
+    return axios.delete(`${AppOptions.baseURL}/${url}`, {headers})
+}

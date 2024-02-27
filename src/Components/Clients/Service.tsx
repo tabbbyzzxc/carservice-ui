@@ -1,5 +1,5 @@
-import {Car, Client, EditClient, NewCar, NewClient} from "./Model";
-import {Get, Post, Put} from "../../Services/Http/ApiServiceProvider";
+import {EditClient, NewClient} from "./Model";
+import {Delete, Get, Post, Put} from "../../Services/Http/ApiServiceProvider";
 
 
 export async function getClientsList(skip: number, take: number, search: string = "") {
@@ -13,10 +13,14 @@ export async function getClient(id: number){
 }
 
 export async function postClient(client: NewClient){
-        const response = await Post('clients/post-client', client);
+    const response = await Post('clients/post-client', client);
 }
 
 export async function editClient(id: number, client: EditClient){
     const response = await Put(`clients/edit-client/${id}`, client);
+}
+
+export async function deleteClient(id: number){
+    const response = await Delete(`clients/delete-client/${id}`);
 }
 

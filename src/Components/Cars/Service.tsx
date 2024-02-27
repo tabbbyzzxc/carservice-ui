@@ -1,5 +1,5 @@
 import {EditCar, NewCar} from "../Clients/Model";
-import {Get, Post, Put} from "../../Services/Http/ApiServiceProvider";
+import {Delete, Get, Post, Put} from "../../Services/Http/ApiServiceProvider";
 
 
 export async function getCar(id: number){
@@ -14,5 +14,10 @@ export async function postCar(car: NewCar){
 
 export async function editCar(id: number, car: EditCar){
     const response = await Put(`cars/edit-car/${id}`, car);
+    return response.data;
+}
+
+export async function deleteCar(id: number){
+    const response = await Delete(`cars/delete-car/${id}`)
     return response.data;
 }

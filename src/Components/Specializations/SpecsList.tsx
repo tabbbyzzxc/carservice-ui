@@ -1,20 +1,23 @@
-import {deleteClient, getClientsList} from "./Service";
-import React, {useEffect, useState} from "react";
-import {Client} from "./Model";
+
+import React, {FormEvent, useEffect, useState} from "react";
 import {AppOptions} from "../../AppOptions";
 import Search from "../Common/Search";
-import {Link} from "react-router-dom";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import { faPenSquare } from '@fortawesome/free-solid-svg-icons';
-import NewClientModal from "./NewClientModal";
-import EditClientModal from "./EditClientModal";
-import DeleteClientModal from "./DeleteClientModal";
+import {deleteSpec, editSpec, getSpecsList, postSpec} from "./Service";
+import {EditSpecialization, NewSpecialization, Specialization} from "./Model";
+import EditSpecModal from "./EditSpecModal";
+import NewSpecModal from "./NewSpecModal";
+import DeleteSpecModal from "./DeleteSpecModal";
 
 
-const ClientsList: React.FC = () => {
-    const [listClients, setListClients] = useState<Client[]>([]);
+
+const SpecsList: React.FC = () => {
+    const [specsList, setSpecsList] = useState<Specialization[]>([]);
     const [totalCount, setTotalCount] = useState(0);
     const [currentIndex, setCurrentIndex] = useState(0);
+    const [searchValue, setSearchValue] = useState("");
+
 
     useEffect(() => {
         loadPage(0);
@@ -23,10 +26,11 @@ const ClientsList: React.FC = () => {
 
     const loadPage = (index: number, search: string = "") => {
         setCurrentIndex(index);
+        setSearchValue(search);
         const fetchDataFromApi = async () => {
             try {
-                const result = await getClientsList(index * AppOptions.tableRowsCount, AppOptions.tableRowsCount, search);
-                setListClients(result.clients);
+                const result = await getSpecsList(index * AppOptions.tableRowsCount, AppOptions.tableRowsCount, search);
+                setSpecsList(result.specializations);
                 setTotalCount(result.total);
             } catch (error) {
                 console.error('Error:', error);
@@ -36,8 +40,18 @@ const ClientsList: React.FC = () => {
         fetchDataFromApi();
     }
 
-    const handleDeleteClient = async (clientId: number) => {
-        await deleteClient(clientId);
+    const handleAddSpec = async(newSpec: NewSpecialization) => {
+        await postSpec(newSpec);
+        loadPage(currentIndex, searchValue);
+    }
+
+    const handleEditSpec = async ( id: number, editedSpec: EditSpecialization) => {
+        await editSpec(id, editedSpec);
+        loadPage(currentIndex, searchValue);
+    }
+
+    const handleDeleteSpec = async (specId: number) => {
+        await deleteSpec(specId);
         /*if((totalCount)/ AppOptions.tableRowsCount < currentIndex){
             setCurrentIndex(currentIndex-1);
         }*/
@@ -48,26 +62,30 @@ const ClientsList: React.FC = () => {
     return (
         <div className="container">
             <Search onSearchChange={loadPage} />
-            <NewClientModal/>
+            <NewSpecModal onSpecAdd={handleAddSpec}/>
             <table className="table table-striped">
                 <thead>
                     <tr>
                         <th>Id</th>
-                        <th>First name</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Hours</th>
                         <th></th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
-                    {listClients.map((item, index) => (
+                    {specsList.map((item, index) => (
                         <tr key={index}>
                             <td>{item.id}</td>
-                            <td>{item.firstName + " " + item.lastName}</td>
+                            <td>{item.name}</td>
+                            <td>{item.price}</td>
+                            <td>{item.hours}</td>
                             <td>
-                                <EditClientModal clientId={item.id}/>
+                                <EditSpecModal specId={item.id} onSpecEdit={handleEditSpec}/>
                             </td>
                             <td>
-                                <DeleteClientModal client={item} handleDeleteClient={handleDeleteClient}/>
+                                <DeleteSpecModal spec={item} handleDeleteSpec={handleDeleteSpec}/>
                             </td>
                         </tr>
                     ))}
@@ -88,4 +106,4 @@ const ClientsList: React.FC = () => {
     );
 }
 
-export default ClientsList
+export default SpecsList;

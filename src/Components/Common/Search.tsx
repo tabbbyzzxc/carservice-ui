@@ -14,11 +14,13 @@ const Search: React.FC<SearchProps> = ({ onSearchChange }) => {
     }
 
     return(
-        <input
-            type="text"
-            placeholder="Search..."
-            onChange={(e) => handleSearch(e.target.value)}
-        />
+            <input
+                type="text"
+                placeholder="Search..."
+                className={"mt-3"}
+                onChange={(e) => handleSearch(e.target.value)}
+            />
+
     )
 }
 
