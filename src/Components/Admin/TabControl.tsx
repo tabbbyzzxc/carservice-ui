@@ -7,6 +7,7 @@ import {editOptions, getOptions} from "./Service";
 import {Contacts, Main, WeekDays} from "./Model";
 import Button from "react-bootstrap/Button";
 import WeekDaysTab from "./WeekDaysTab";
+import AppointmentsList from "../Appointments/AppointmentsList";
 
 
 const AdminControlledTab: React.FC = () => {
