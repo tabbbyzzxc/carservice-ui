@@ -9,15 +9,17 @@ import { faPenSquare } from '@fortawesome/free-solid-svg-icons';
 import NewClientModal from "./NewClientModal";
 import EditClientModal from "./EditClientModal";
 import DeleteClientModal from "./DeleteClientModal";
+import { Spinner } from "react-bootstrap";
 
 
 const ClientsList: React.FC = () => {
     const [listClients, setListClients] = useState<Client[]>([]);
     const [totalCount, setTotalCount] = useState(0);
     const [currentIndex, setCurrentIndex] = useState(0);
-
+    const [isLoading, setIsLoading] = useState(true);
     useEffect(() => {
-        loadPage(0);
+            loadPage(0);
+
     }, []); // The empty dependency array ensures that this effect runs once on mount
 
 
@@ -28,6 +30,7 @@ const ClientsList: React.FC = () => {
                 const result = await getClientsList(index * AppOptions.tableRowsCount, AppOptions.tableRowsCount, search);
                 setListClients(result.clients);
                 setTotalCount(result.total);
+                setIsLoading(false);
             } catch (error) {
                 console.error('Error:', error);
             }
@@ -44,6 +47,18 @@ const ClientsList: React.FC = () => {
         loadPage(currentIndex);
     }
 
+    if(isLoading){
+        return(
+            <div className={"container"}  style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                height: '100vh',
+            }}>
+                <Spinner animation={"border"}/>
+            </div>
+        );
+    }
 
     return (
         <div className="container">

@@ -21,6 +21,6 @@ export interface NewAppointment{
     clientId: number;
     employeeId: number;
     serviceId: number;
-    apptDate: Date;
+    apptRawDate: {year: number, month: number, day: number, hours: number, minutes: number};
     status: number;
 }

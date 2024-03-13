@@ -42,13 +42,13 @@ const EditClientModal: React.FC<{ clientId: number }> = ({ clientId }) => {
         const fetchDataFromApi = async () => {
             try {
                 const result = await getClient(clientId);
-                setEmail(result.email);
-                setPhoneNumber(result.phoneNumber);
-                setFirstName(result.firstName);
-                setLastName(result.lastName);
-                setAddress(result.address);
-                setCity(result.city);
-                setCars(result.cars);
+                setEmail(result.client.email);
+                setPhoneNumber(result.client.phoneNumber);
+                setFirstName(result.client.firstName);
+                setLastName(result.client.lastName);
+                setAddress(result.client.address);
+                setCity(result.client.city);
+                setCars(result.client.cars);
             } catch (error) {
                 console.error('Error:', error);
             }

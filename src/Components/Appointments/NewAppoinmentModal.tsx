@@ -9,6 +9,10 @@ import { NewAppointment, Service } from "./Model";
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { Simulate } from "react-dom/test-utils";
+import DateTimePicker from 'react-datetime-picker';
+import 'react-datetime-picker/dist/DateTimePicker.css';
+import 'react-calendar/dist/Calendar.css';
+import 'react-clock/dist/Clock.css';
 import paste = Simulate.paste;
 
 interface ApptModalProps{
@@ -18,6 +22,10 @@ interface ApptModalProps{
     onApptAdd: (appt: NewAppointment) => Promise<void>;
 }
 
+type ValuePiece = Date | null;
+
+type Value = ValuePiece | [ValuePiece, ValuePiece];
+
 const NewApointmentModal: React.FC<ApptModalProps> = ({clients, employees, services, onApptAdd}) =>{
     const [show, setShow] = useState(false);
 
@@ -25,7 +33,8 @@ const NewApointmentModal: React.FC<ApptModalProps> = ({clients, employees, servi
     const [selectedEmployeeId, setSelectedEmployeeId] = useState(0);
 
     const [selectedServiceId, setSelectedServiceId] = useState(0);
-    const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
+    const [selectedDate, setSelectedDate] = useState<Value>(new Date());
+
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
@@ -42,8 +51,21 @@ const NewApointmentModal: React.FC<ApptModalProps> = ({clients, employees, servi
     };
 
     const handleSubmit = () => {
-        if(selectedDate != null){
-            onApptAdd({clientId: selectedClientId, employeeId: selectedEmployeeId, serviceId: selectedServiceId, apptDate: selectedDate, status: 1});
+        if(selectedDate != null) {
+            const d = (selectedDate as Date);
+            onApptAdd({
+                clientId: selectedClientId,
+                employeeId: selectedEmployeeId,
+                serviceId: selectedServiceId,
+                apptRawDate: {
+                    year: d.getFullYear(),
+                    month: d.getMonth(),
+                    day: d.getDate(),
+                    hours: d.getHours(),
+                    minutes: d.getMinutes()
+                },
+                status: 1
+            });
         }
 
         setShow(false);
@@ -111,12 +133,7 @@ const NewApointmentModal: React.FC<ApptModalProps> = ({clients, employees, servi
                             </Form.Group>
                             <Form.Group>
                                 <Form.Label>Date</Form.Label>
-                                <DatePicker
-                                    selected={selectedDate}
-                                    onChange={date => setSelectedDate(date)}
-                                    dateFormat="dd/MM/yyyy"
-                                    placeholderText="Select a date"
-                                />
+                                <DateTimePicker format="dd/MM/yyyy HH:mm" onChange={setSelectedDate} value={selectedDate} className="form-control"/>
                             </Form.Group>
                         </Form>
                     </div>

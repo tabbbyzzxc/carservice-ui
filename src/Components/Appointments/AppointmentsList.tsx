@@ -14,16 +14,18 @@ const AppointmentsList: React.FC = () => {
     const [ clients, setClients] = useState<Client[]>([]);
     const [ employees, setEmployees] = useState<Employee[]>([]);
     const [ services, setServices] = useState<Service[]>([]);
+    const [ currentDate, setCurrentDate] = useState<Date>(new Date());
+
     useEffect(() => {
-        loadPage(0);
+        loadPage(0, currentDate);
     }, []); // The empty dependency array ensures that this effect runs once on mount
 
 
-    const loadPage = (index: number, search: string = "") => {
+    const loadPage = (index: number, date: Date) => {
         setCurrentIndex(index);
         const fetchDataFromApi = async () => {
             try {
-                const list = await getApptsList(index * AppOptions.tableRowsCount, 15, search);
+                const list = await getApptsList(index * AppOptions.tableRowsCount, 15, date);
                 const options = await getApptsOptions();
                 setClients(options.clients);
                 setEmployees(options.employees);
@@ -40,8 +42,9 @@ const AppointmentsList: React.FC = () => {
 
     const handleApptSubmit = async(appt: NewAppointment) =>{
         await postAppt(appt);
-        loadPage(currentIndex);
+        loadPage(currentIndex, currentDate);
     }
+
     return(
         <div className={"container"}>
             <NewApointmentModal clients={clients} employees={employees} services={services} onApptAdd={handleApptSubmit}/>

@@ -43,12 +43,12 @@ const EmployeeEditModal: React.FC<{ employeeId: number }> = ({ employeeId }) => 
             try {
                 const result = await getEmployee(employeeId);
                 setEmail(result.email);
-                setPhoneNumber(result.phoneNumber);
-                setFirstName(result.firstName);
-                setLastName(result.lastName);
-                setAddress(result.address);
-                setCity(result.city);
-                setSpecs(result.specializations);
+                setPhoneNumber(result.employee.phoneNumber);
+                setFirstName(result.employee.firstName);
+                setLastName(result.employee.lastName);
+                setAddress(result.employee.address);
+                setCity(result.employee.city);
+                setSpecs(result.employee.specializations);
             } catch (error) {
                 console.error('Error:', error);
             }
